@@ -284,7 +284,7 @@ function Predict({ fields, funds, text, setText, field, setField, fund, setFund,
     { label: 'Convenient for shopping', icon: '🛒', text: 'These services are very convenient for online shopping and I use them regularly.' },
     { label: 'Overspending risk', icon: '💸', text: 'Using BNPL makes it too easy to overspend and lose track of how much I owe.' },
     { label: 'No interest, good deal', icon: '🎯', text: 'Zero interest EMI is a great deal — I used it to buy my phone without financial stress.' },
-    { label: 'Trust issues', icon: '🔒', text: 'I don\'t trust BNPL apps with my financial data and worry about security and fraud.' },
+    { label: 'Trust issues', icon: '🔒', text: 'I don't trust BNPL apps with my financial data and worry about security and fraud.' },
     { label: 'Peer pressure', icon: '👥', text: 'My friends all use BNPL so I feel pressured to use it even though I am not comfortable.' },
     { label: 'Late fees concern', icon: '📅', text: 'Missing a payment means huge late fees which is very stressful for students like me.' },
   ];
@@ -310,22 +310,56 @@ function Predict({ fields, funds, text, setText, field, setField, fund, setFund,
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20, maxWidth: 900, margin: '0 auto' }}>
 
-      {/* Topic selector */}
+      {/* Cluster persona selector */}
       <Card>
-        <SectionTitle>Pick a student opinion to analyse</SectionTitle>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10, marginBottom: 20 }}>
-          {TOPICS.map((t) => (
-            <button key={t.label} onClick={() => setText(t.text)} style={{
-              padding: '12px 10px', borderRadius: 10,
-              border: text === t.text ? `2px solid ${C.accent}` : `1px solid ${C.border}`,
-              background: text === t.text ? C.accent + '22' : C.surface2,
-              color: text === t.text ? C.accent2 : C.muted,
-              fontSize: 12, cursor: 'pointer', textAlign: 'left',
-              transition: 'all .15s', display: 'flex', flexDirection: 'column', gap: 6,
+        <SectionTitle>Pick a student persona to analyse</SectionTitle>
+        <p style={{ color: C.muted, fontSize: 13, marginBottom: 16, marginTop: -8 }}>
+          Based on the 3 K-Means clusters from the survey — select any persona to pre-fill the text box.
+        </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 20 }}>
+          {CLUSTERS.map((cl) => (
+            <div key={cl.id} style={{
+              border: `1px solid ${C.border}`, borderRadius: 12,
+              overflow: 'hidden',
             }}>
-              <span style={{ fontSize: 18 }}>{t.icon}</span>
-              <span style={{ fontWeight: 600, color: text === t.text ? C.accent2 : C.text, lineHeight: 1.3 }}>{t.label}</span>
-            </button>
+              {/* Cluster header */}
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: 12,
+                padding: '10px 16px',
+                background: cl.color + '18',
+                borderBottom: `1px solid ${C.border}`,
+              }}>
+                <div style={{
+                  width: 10, height: 10, borderRadius: '50%',
+                  background: cl.color, flexShrink: 0,
+                }} />
+                <span style={{ fontWeight: 700, fontSize: 13, color: cl.color }}>{cl.label} — {cl.name}</span>
+                <span style={{
+                  marginLeft: 'auto', fontSize: 11, color: C.muted,
+                  background: C.surface2, padding: '2px 10px', borderRadius: 10,
+                  border: `1px solid ${C.border}`,
+                }}>{cl.desc}</span>
+              </div>
+              {/* Two persona buttons */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 0 }}>
+                {cl.personas.map((p, i) => (
+                  <button key={p.label} onClick={() => setText(p.text)} style={{
+                    padding: '12px 16px', border: 'none', textAlign: 'left', cursor: 'pointer',
+                    borderRight: i === 0 ? `1px solid ${C.border}` : 'none',
+                    background: text === p.text ? cl.color + '22' : 'transparent',
+                    outline: text === p.text ? `2px solid ${cl.color}` : 'none',
+                    outlineOffset: -2,
+                    transition: 'all .15s', display: 'flex', flexDirection: 'column', gap: 4,
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span style={{ fontSize: 16 }}>{p.icon}</span>
+                      <span style={{ fontWeight: 600, fontSize: 12, color: text === p.text ? cl.color : C.text }}>{p.label}</span>
+                    </div>
+                    <span style={{ fontSize: 11, color: C.muted, lineHeight: 1.4 }}>{p.text.slice(0, 72)}…</span>
+                  </button>
+                ))}
+              </div>
+            </div>
           ))}
         </div>
 
