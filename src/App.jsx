@@ -277,83 +277,143 @@ function Overview({ data, err }) {
    PREDICT TAB
 ═══════════════════════════════════════════════════════════════════════════ */
 function Predict({ fields, funds, text, setText, field, setField, fund, setFund, onSubmit, loading, result, err }) {
-  const EXAMPLES = [
-    "BNPL helped me buy a laptop without worrying about money upfront.",
-    "I am afraid of hidden charges and falling into debt.",
-    "These services are convenient and I use them regularly for online shopping.",
-    "I prefer not to use credit — it leads to overspending.",
+
+  const TOPICS = [
+    { label: 'Affordable & helpful', icon: '✅', text: 'BNPL makes expensive products affordable and helps me manage my monthly budget easily.' },
+    { label: 'Fear of debt', icon: '⚠️', text: 'I am scared of accumulating debt and hidden charges using BNPL or EMI services.' },
+    { label: 'Convenient for shopping', icon: '🛒', text: 'These services are very convenient for online shopping and I use them regularly.' },
+    { label: 'Overspending risk', icon: '💸', text: 'Using BNPL makes it too easy to overspend and lose track of how much I owe.' },
+    { label: 'No interest, good deal', icon: '🎯', text: 'Zero interest EMI is a great deal — I used it to buy my phone without financial stress.' },
+    { label: 'Trust issues', icon: '🔒', text: 'I don't trust BNPL apps with my financial data and worry about security and fraud.' },
+    { label: 'Peer pressure', icon: '👥', text: 'My friends all use BNPL so I feel pressured to use it even though I am not comfortable.' },
+    { label: 'Late fees concern', icon: '📅', text: 'Missing a payment means huge late fees which is very stressful for students like me.' },
   ];
 
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24, maxWidth: 900, margin: '0 auto' }}>
-      <Card>
-        <SectionTitle>Live Sentiment & Adoption Predictor</SectionTitle>
-        <p style={{ color: C.muted, fontSize: 14, marginBottom: 20 }}>
-          Enter a student's opinion about BNPL/EMI services. All four ML models will analyse it instantly.
-        </p>
+  const FIELD_ICONS = {
+    'Engineering / Technology': '💻',
+    'Commerce / Management': '📊',
+    'Science': '🔬',
+    'Arts / Humanities': '🎨',
+    'Medicine / Pharmacy': '⚕️',
+    'Other': '📚',
+  };
 
-        {/* Quick examples */}
-        <div style={{ marginBottom: 16 }}>
-          <div style={{ fontSize: 12, color: C.muted, marginBottom: 8, fontWeight: 500 }}>QUICK EXAMPLES</div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-            {EXAMPLES.map((ex, i) => (
-              <button key={i} onClick={() => setText(ex)} style={{
-                padding: '4px 12px', borderRadius: 20, border: `1px solid ${C.border}`,
-                background: 'transparent', color: C.muted, fontSize: 12, cursor: 'pointer',
-                transition: 'all .15s',
-              }}
-                onMouseEnter={e => { e.target.style.borderColor = C.accent; e.target.style.color = C.accent2; }}
-                onMouseLeave={e => { e.target.style.borderColor = C.border; e.target.style.color = C.muted; }}
-              >
-                #{i + 1}
-              </button>
-            ))}
-          </div>
+  const FUND_ICONS = {
+    'Parents / Family': '👨‍👩‍👧',
+    'Part-time job': '💼',
+    'Scholarship': '🏆',
+    'Student loan': '🏦',
+    'Freelancing': '💻',
+    'Other': '💰',
+  };
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, maxWidth: 900, margin: '0 auto' }}>
+
+      {/* Topic selector */}
+      <Card>
+        <SectionTitle>Pick a student opinion to analyse</SectionTitle>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10, marginBottom: 20 }}>
+          {TOPICS.map((t) => (
+            <button key={t.label} onClick={() => setText(t.text)} style={{
+              padding: '12px 10px', borderRadius: 10,
+              border: text === t.text ? `2px solid ${C.accent}` : `1px solid ${C.border}`,
+              background: text === t.text ? C.accent + '22' : C.surface2,
+              color: text === t.text ? C.accent2 : C.muted,
+              fontSize: 12, cursor: 'pointer', textAlign: 'left',
+              transition: 'all .15s', display: 'flex', flexDirection: 'column', gap: 6,
+            }}>
+              <span style={{ fontSize: 18 }}>{t.icon}</span>
+              <span style={{ fontWeight: 600, color: text === t.text ? C.accent2 : C.text, lineHeight: 1.3 }}>{t.label}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* OR divider */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+          <div style={{ flex: 1, height: 1, background: C.border }} />
+          <span style={{ fontSize: 12, color: C.muted }}>or type your own</span>
+          <div style={{ flex: 1, height: 1, background: C.border }} />
         </div>
 
         <textarea
           value={text}
           onChange={e => setText(e.target.value)}
-          placeholder="Type or paste a student's opinion about BNPL/EMI services…"
-          rows={4}
+          placeholder="Type a student's opinion about BNPL/EMI services…"
+          rows={3}
           style={{
             width: '100%', padding: 14, borderRadius: 10, resize: 'vertical',
             background: C.surface2, border: `1px solid ${C.border}`,
-            color: C.text, fontSize: 15, outline: 'none', fontFamily: 'inherit',
-            transition: 'border .15s',
+            color: C.text, fontSize: 14, outline: 'none', fontFamily: 'inherit',
+            transition: 'border .15s', boxSizing: 'border-box',
           }}
           onFocus={e => e.target.style.borderColor = C.accent}
           onBlur={e => e.target.style.borderColor = C.border}
         />
 
-        {/* Optional fields */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginTop: 12 }}>
-          <SelectField label="Field of Study (optional)" value={field} onChange={setField}
-            options={fields} placeholder="Select field…" />
-          <SelectField label="Funding Source (optional)" value={fund} onChange={setFund}
-            options={funds} placeholder="Select source…" />
+        {/* Profile selectors */}
+        <div style={{ marginTop: 16, marginBottom: 4 }}>
+          <div style={{ fontSize: 12, color: C.muted, marginBottom: 10, fontWeight: 500 }}>STUDENT PROFILE (improves adoption prediction)</div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+
+            {/* Field of study pills */}
+            <div>
+              <div style={{ fontSize: 12, color: C.muted, marginBottom: 8 }}>Field of study</div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                {fields.map(f => (
+                  <button key={f} onClick={() => setField(field === f ? '' : f)} style={{
+                    padding: '6px 11px', borderRadius: 20, fontSize: 12, cursor: 'pointer',
+                    border: field === f ? `1px solid ${C.accent}` : `1px solid ${C.border}`,
+                    background: field === f ? C.accent + '33' : 'transparent',
+                    color: field === f ? C.accent2 : C.muted, transition: 'all .15s',
+                  }}>
+                    {FIELD_ICONS[f] || '📚'} {f.split('/')[0].trim()}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Funding source pills */}
+            <div>
+              <div style={{ fontSize: 12, color: C.muted, marginBottom: 8 }}>Funding source</div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                {funds.map(f => (
+                  <button key={f} onClick={() => setFund(fund === f ? '' : f)} style={{
+                    padding: '6px 11px', borderRadius: 20, fontSize: 12, cursor: 'pointer',
+                    border: fund === f ? `1px solid ${C.accent}` : `1px solid ${C.border}`,
+                    background: fund === f ? C.accent + '33' : 'transparent',
+                    color: fund === f ? C.accent2 : C.muted, transition: 'all .15s',
+                  }}>
+                    {FUND_ICONS[f] || '💰'} {f}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+          </div>
         </div>
 
+        {/* Run button */}
         <button
           onClick={onSubmit}
           disabled={loading || !text.trim()}
           style={{
-            marginTop: 16, width: '100%', padding: '13px 0', borderRadius: 10,
+            marginTop: 20, width: '100%', padding: '14px 0', borderRadius: 10,
             border: 'none', cursor: loading || !text.trim() ? 'not-allowed' : 'pointer',
             background: loading || !text.trim()
               ? C.border
               : `linear-gradient(135deg,${C.accent},${C.accent2})`,
-            color: '#fff', fontWeight: 700, fontSize: 15, transition: 'all .2s',
+            color: '#0a0a0a', fontWeight: 700, fontSize: 15, transition: 'all .2s',
+            letterSpacing: '0.03em',
           }}
         >
-          {loading ? '⏳  Analysing…' : '🔍  Run All Models'}
+          {loading ? '⏳  Analysing…' : '▶  Run All 4 Models'}
         </button>
 
         {loading && <div style={{ marginTop: 12 }}><Spinner /></div>}
         {err && <ErrorBox msg={err} />}
       </Card>
 
-      {/* Results */}
       {result && <PredictResult result={result} text={text} />}
     </div>
   );
