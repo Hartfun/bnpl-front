@@ -1,18 +1,18 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  PieChart, Pie, Cell, RadialBarChart, RadialBar, Legend
+  PieChart, Pie, Cell, RadialBarChart, RadialBar, Legend, LabelList
 } from 'recharts';
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 /* ── colour tokens ─────────────────────────────────────────────────────────── */
 const C = {
-  accent: '#6366f1', accent2: '#818cf8',
-  positive: '#22c55e', neutral: '#94a3b8', negative: '#ef4444',
-  cluster: ['#6366f1', '#f59e0b', '#10b981'],
-  bg: '#0f172a', surface: '#1e293b', surface2: '#273549', border: '#334155',
-  text: '#f1f5f9', muted: '#94a3b8',
+  accent: '#C9A84C', accent2: '#F0D080',
+  positive: '#C9A84C', neutral: '#e2e8f0', negative: '#ef4444',
+  cluster: ['#C9A84C', '#F0D080', '#e2e8f0'],
+  bg: '#0a0a0a', surface: '#111111', surface2: '#1a1a1a', border: '#2a2a2a',
+  text: '#f8f8f8', muted: '#888888',
 };
 
 /* ── tiny shared components ─────────────────────────────────────────────────── */
@@ -78,7 +78,7 @@ export default function App() {
     fetch(`${API}/api/stats`)
       .then(r => r.json())
       .then(setStatsData)
-      .catch(() => setStatsErr('Could not reach the API. Check your REACT_APP_API_URL.'));
+      .catch(() => setStatsErr('Could not reach the API. Check your VITE_API_URL in .env.local'));
 
     fetch(`${API}/api/fields`)
       .then(r => r.json())
@@ -106,17 +106,17 @@ export default function App() {
 
   /* ── render ────────────────────────────────────────────────────────────── */
   return (
-    <div style={{ minHeight: '100vh', background: C.bg }}>
+    <div style={{ minHeight: '100vh', background: '#0a0a0a' }}>
       {/* Header */}
       <header style={{
-        background: C.surface, borderBottom: `1px solid ${C.border}`,
+        background: '#111111', borderBottom: `1px solid #2a2a2a`,
         padding: '0 32px', display: 'flex', alignItems: 'center',
         justifyContent: 'space-between', height: 64, position: 'sticky', top: 0, zIndex: 100
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <div style={{
             width: 36, height: 36, borderRadius: 10,
-            background: `linear-gradient(135deg,${C.accent},${C.accent2})`,
+            background: `linear-gradient(135deg,#C9A84C,#F0D080)`,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             fontSize: 18
           }}>💳</div>
@@ -131,8 +131,8 @@ export default function App() {
             <button key={t} onClick={() => setTab(t)} style={{
               padding: '6px 16px', borderRadius: 8, border: 'none', cursor: 'pointer',
               fontWeight: 500, fontSize: 14, transition: 'all .15s',
-              background: tab === t ? C.accent : 'transparent',
-              color: tab === t ? '#fff' : C.muted,
+              background: tab === t ? '#C9A84C' : 'transparent',
+              color: tab === t ? '#0a0a0a' : C.muted,
             }}>{t}</button>
           ))}
         </nav>
@@ -177,8 +177,8 @@ function Overview({ data, err }) {
 
   const modelAccData = [
     { name: 'Logistic\nRegression', accuracy: +(m.lr_accuracy * 100).toFixed(1), fill: C.accent },
-    { name: 'Random\nForest', accuracy: +(m.rf_accuracy * 100).toFixed(1), fill: '#f59e0b' },
-    { name: 'Gradient\nBoosting', accuracy: +(m.gb_accuracy * 100).toFixed(1), fill: '#10b981' },
+    { name: 'Random\nForest', accuracy: +(m.rf_accuracy * 100).toFixed(1), fill: '#F0D080' },
+    { name: 'Gradient\nBoosting', accuracy: +(m.gb_accuracy * 100).toFixed(1), fill: '#e2e8f0' },
   ];
 
   return (
@@ -192,7 +192,7 @@ function Overview({ data, err }) {
           sub={`${(non_users/total*100).toFixed(1)}% of respondents`} color={C.neutral} />
         <StatTile label="Best Model Acc."
           value={`${(Math.max(m.lr_accuracy, m.rf_accuracy, m.gb_accuracy)*100).toFixed(1)}%`}
-          sub="Random Forest (Adoption)" color={C.accent} />
+          sub="Random Forest (Adoption)" color={'#C9A84C'} />
       </div>
 
       {/* Charts row 1 */}
@@ -248,7 +248,7 @@ function Overview({ data, err }) {
             <YAxis type="category" dataKey="name" width={140} tick={{ fill: C.muted, fontSize: 12 }} />
             <Tooltip
               contentStyle={{ background: C.surface2, border: `1px solid ${C.border}`, borderRadius: 8, color: C.text }} />
-            <Bar dataKey="value" fill={C.accent} radius={[0, 6, 6, 0]} />
+            <Bar dataKey="value" fill={'#C9A84C'} radius={[0, 6, 6, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </Card>
@@ -256,9 +256,9 @@ function Overview({ data, err }) {
       {/* Model cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 16 }}>
         {[
-          { title: '🤖 Logistic Regression', desc: 'Sentiment Classification (TF-IDF)', acc: m.lr_accuracy, color: C.accent },
-          { title: '🌲 Random Forest', desc: 'BNPL Adoption Prediction', acc: m.rf_accuracy, color: '#f59e0b' },
-          { title: '🚀 Gradient Boosting', desc: 'Advanced Sentiment Analysis', acc: m.gb_accuracy, color: '#10b981' },
+          { title: '🤖 Logistic Regression', desc: 'Sentiment Classification (TF-IDF)', acc: m.lr_accuracy, color: '#C9A84C' },
+          { title: '🌲 Random Forest', desc: 'BNPL Adoption Prediction', acc: m.rf_accuracy, color: '#F0D080' },
+          { title: '🚀 Gradient Boosting', desc: 'Advanced Sentiment Analysis', acc: m.gb_accuracy, color: '#e2e8f0' },
         ].map(({ title, desc, acc, color }) => (
           <Card key={title} style={{ textAlign: 'center' }}>
             <div style={{ fontSize: 24, marginBottom: 8 }}>{title.split(' ')[0]}</div>
