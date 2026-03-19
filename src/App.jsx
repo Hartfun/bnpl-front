@@ -284,7 +284,7 @@ function Predict({ fields, funds, text, setText, field, setField, fund, setFund,
     { label: 'Convenient for shopping', icon: '🛒', text: 'These services are very convenient for online shopping and I use them regularly.' },
     { label: 'Overspending risk', icon: '💸', text: 'Using BNPL makes it too easy to overspend and lose track of how much I owe.' },
     { label: 'No interest, good deal', icon: '🎯', text: 'Zero interest EMI is a great deal — I used it to buy my phone without financial stress.' },
-    { label: 'Trust issues', icon: '🔒', text: 'I don\'t trust BNPL apps with my financial data and worry about security and fraud.' },
+    { label: 'Trust issues', icon: '🔒', text: 'I don't trust BNPL apps with my financial data and worry about security and fraud.' },
     { label: 'Peer pressure', icon: '👥', text: 'My friends all use BNPL so I feel pressured to use it even though I am not comfortable.' },
     { label: 'Late fees concern', icon: '📅', text: 'Missing a payment means huge late fees which is very stressful for students like me.' },
   ];
