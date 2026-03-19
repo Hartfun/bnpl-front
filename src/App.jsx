@@ -46,7 +46,7 @@ const Spinner = () => (
 const StatTile = ({ label, value, sub, color = C.accent }) => (
   <Card>
     <div style={{ fontSize: 13, color: C.muted, marginBottom: 6 }}>{label}</div>
-    <div style={{ fontSize: 32, fontWeight: 700, color }}>{value}</div>
+    <div style={{ fontSize: 36, fontWeight: 700, color }}>{value}</div>
     {sub && <div style={{ fontSize: 12, color: C.muted, marginTop: 4 }}>{sub}</div>}
   </Card>
 );
@@ -110,7 +110,7 @@ export default function App() {
       {/* Header */}
       <header style={{
         background: '#111111', borderBottom: `1px solid #2a2a2a`,
-        padding: '0 32px', display: 'flex', alignItems: 'center',
+        padding: '0 40px', display: 'flex', alignItems: 'center',
         justifyContent: 'space-between', height: 64, position: 'sticky', top: 0, zIndex: 100
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -138,7 +138,7 @@ export default function App() {
         </nav>
       </header>
 
-      <main style={{ maxWidth: 1100, margin: '0 auto', padding: '32px 24px' }}>
+      <main style={{ maxWidth: '100%', padding: '32px 40px' }}>
         {tab === 'Overview' && <Overview data={statsData} err={statsErr} />}
         {tab === 'Predict' && (
           <Predict
@@ -184,7 +184,7 @@ function Overview({ data, err }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
       {/* KPI row */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 20 }}>
         <StatTile label="Total Responses" value={total} sub="Survey participants" />
         <StatTile label="BNPL Users" value={users}
           sub={`${(users/total*100).toFixed(1)}% adoption rate`} color={C.positive} />
@@ -196,7 +196,7 @@ function Overview({ data, err }) {
       </div>
 
       {/* Charts row 1 */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
         <Card>
           <SectionTitle>Sentiment Distribution (VADER)</SectionTitle>
           <ResponsiveContainer width="100%" height={220}>
@@ -254,7 +254,7 @@ function Overview({ data, err }) {
       </Card>
 
       {/* Model cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 20 }}>
         {[
           { title: '🤖 Logistic Regression', desc: 'Sentiment Classification (TF-IDF)', acc: m.lr_accuracy, color: '#C9A84C' },
           { title: '🌲 Random Forest', desc: 'BNPL Adoption Prediction', acc: m.rf_accuracy, color: '#F0D080' },
@@ -285,7 +285,7 @@ function Predict({ fields, funds, text, setText, field, setField, fund, setFund,
   ];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24, maxWidth: 720, margin: '0 auto' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 24, maxWidth: 900, margin: '0 auto' }}>
       <Card>
         <SectionTitle>Live Sentiment & Adoption Predictor</SectionTitle>
         <p style={{ color: C.muted, fontSize: 14, marginBottom: 20 }}>
@@ -468,7 +468,7 @@ function Clusters({ data }) {
       </Card>
 
       {/* Cluster cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 20 }}>
         {clusters.map((c, i) => (
           <Card key={c.id} style={{ borderTop: `4px solid ${C.cluster[i]}` }}>
             <div style={{ fontSize: 22, marginBottom: 6 }}>{NAMES[i].split(' ')[0]}</div>
@@ -486,7 +486,7 @@ function Clusters({ data }) {
       </div>
 
       {/* Charts */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
         <Card>
           <SectionTitle>BNPL Adoption Rate by Cluster</SectionTitle>
           <ResponsiveContainer width="100%" height={220}>
