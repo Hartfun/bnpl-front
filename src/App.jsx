@@ -62,8 +62,8 @@ export default function App() {
   const [tab, setTab] = useState('Overview');
   const [statsData, setStatsData] = useState(null);
   const [statsErr, setStatsErr] = useState(null);
-  const [fields, setFields] = useState([]);
-  const [funds, setFunds] = useState([]);
+  const [fields, setFields] = useState(['Engineering / Technology','Science','Commerce / Management','Arts / Humanities','Medicine / Pharmacy','Other']);
+  const [funds, setFunds] = useState(['Parental Allowance','Part-time Job','Scholarship / Stipend','Freelancing','Other']);
 
   /* predict form */
   const [text, setText] = useState('');
@@ -315,10 +315,9 @@ function Predict({ fields, funds, text, setText, field, setField, fund, setFund,
   };
 
   const FUND_ICONS = {
-    'Parents / Family': '👨‍👩‍👧',
-    'Part-time job': '💼',
-    'Scholarship': '🏆',
-    'Student loan': '🏦',
+    'Parental Allowance': '👨‍👩‍👧',
+    'Part-time Job': '💼',
+    'Scholarship / Stipend': '🏆',
     'Freelancing': '💻',
     'Other': '💰',
   };
