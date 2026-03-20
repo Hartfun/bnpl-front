@@ -554,7 +554,13 @@ function PredictResult({ result, text }) {
           {[
             { label: '🤖 Logistic Regression Sentiment', value: result.lr_sentiment, color: sentimentColor(result.lr_sentiment) },
             { label: '🚀 Gradient Boosting Sentiment', value: result.gb_sentiment, color: sentimentColor(result.gb_sentiment) },
-            { label: '📍 Student Cluster', value: `Cluster ${result.cluster}`, color: C.cluster[result.cluster - 1] },
+            { label: '📍 Student Cluster',
+              value: (() => {
+                const names = ['Happy Adopters','Cautious Non-Users','Reluctant Users'];
+                const idx = result.cluster - 1;
+                return `C${result.cluster} · ${names[idx] || 'Unknown'}`;
+              })(),
+              color: C.cluster[result.cluster - 1] },
             { label: '🎯 Adoption Prediction', value: result.adoption_label, color: adoptC },
           ].map(({ label, value, color }) => (
             <div key={label} style={{
@@ -596,12 +602,12 @@ function Clusters({ data }) {
   if (!data) return <LoadingScreen />;
   const { clusters } = data;
 
-  // Names indexed by KMeans cluster ID (0, 1, 2)
+  // clusters from API: id=1 => KMeans 0 (Happy), id=2 => KMeans 1 (Cautious), id=3 => KMeans 2 (Reluctant)
   const NAMES = ['✅ Happy Adopters', '🤔 Cautious Non-Users', '⚠️ Reluctant Users'];
   const DESCS = [
-    'Adoption 43.7% · Positive sentiment. Active users who find BNPL convenient and stress-free.',
-    'Adoption 2.7% · Neutral sentiment. Students who have not used BNPL and have no strong opinion.',
-    'Adoption 53.7% · Negative sentiment. Users who tried BNPL but had poor experiences.',
+    'Adoption 43.7% · Positive sentiment (+0.42). Active users who find BNPL convenient and stress-free.',
+    'Adoption 2.7% · Neutral sentiment (0.00). Students who have not used BNPL and have no strong opinion.',
+    'Adoption 53.7% · Negative sentiment (-0.46). Users who tried BNPL but had poor or regretful experiences.',
   ];
 
   const adoptData = clusters.map((c, i) => ({
