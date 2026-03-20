@@ -171,15 +171,16 @@ export default function App() {
             </span>
           </div>
           <nav style={{ display: 'flex', gap: 4 }}>
-          {TABS.map(t => (
-            <button key={t} onClick={() => setTab(t)} style={{
-              padding: '6px 16px', borderRadius: 8, border: 'none', cursor: 'pointer',
-              fontWeight: 500, fontSize: 14, transition: 'all .15s',
-              background: tab === t ? '#C9A84C' : 'transparent',
-              color: tab === t ? '#0a0a0a' : C.muted,
-            }}>{t}</button>
-          ))}
-        </nav>
+            {TABS.map(t => (
+              <button key={t} onClick={() => setTab(t)} style={{
+                padding: '6px 16px', borderRadius: 8, border: 'none', cursor: 'pointer',
+                fontWeight: 500, fontSize: 14, transition: 'all .15s',
+                background: tab === t ? '#C9A84C' : 'transparent',
+                color: tab === t ? '#0a0a0a' : C.muted,
+              }}>{t}</button>
+            ))}
+          </nav>
+        </div>
       </header>
 
       <main style={{ maxWidth: '100%', padding: '32px 40px' }}>
