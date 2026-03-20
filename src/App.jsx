@@ -5,7 +5,7 @@ import {
 } from 'recharts';
 
 // v2.1 - cluster personas, gold theme, full width
-const API = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API = 'https://bnpl-back.onrender.com';
 
 /* ── colour tokens ─────────────────────────────────────────────────────────── */
 const C = {
@@ -66,6 +66,9 @@ export default function App() {
   const [fields, setFields] = useState(['Engineering / Technology','Science','Commerce / Management','Arts / Humanities','Medicine / Pharmacy','Other']);
   const [funds, setFunds] = useState(['Parental Allowance','Part-time Job','Scholarship / Stipend','Freelancing','Other']);
 
+  /* api status */
+  const [apiStatus, setApiStatus] = useState('checking'); // 'checking' | 'online' | 'offline' | 'waking'
+
   /* predict form */
   const [text, setText] = useState('');
   const [field, setField] = useState('');
@@ -74,17 +77,39 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [predErr, setPredErr] = useState(null);
 
-  /* fetch overview stats once */
+  /* fetch overview stats + check API status */
   useEffect(() => {
-    fetch(`${API}/api/stats`)
-      .then(r => r.json())
-      .then(setStatsData)
-      .catch(() => setStatsErr('Could not reach the API. Check your VITE_API_URL in .env.local'));
+    let wakeTimer;
+    const checkAndLoad = async () => {
+      try {
+        // First check health
+        const health = await fetch(`${API}/api/health`);
+        if (!health.ok) throw new Error('not ok');
+        const hdata = await health.json();
+        if (!hdata.models_ready) {
+          setApiStatus('waking');
+          wakeTimer = setTimeout(checkAndLoad, 4000);
+          return;
+        }
+        setApiStatus('online');
 
-    fetch(`${API}/api/fields`)
-      .then(r => r.json())
-      .then(d => { setFields(d.fields || []); setFunds(d.funds || []); })
-      .catch(() => {});
+        // Load stats and fields in parallel
+        const [statsRes, fieldsRes] = await Promise.all([
+          fetch(`${API}/api/stats`),
+          fetch(`${API}/api/fields`),
+        ]);
+        const statsJson  = await statsRes.json();
+        const fieldsJson = await fieldsRes.json();
+        setStatsData(statsJson);
+        setFields(fieldsJson.fields || []);
+        setFunds(fieldsJson.funds   || []);
+      } catch {
+        setApiStatus('offline');
+        setStatsErr('Cannot reach the API at ' + API);
+      }
+    };
+    checkAndLoad();
+    return () => clearTimeout(wakeTimer);
   }, []);
 
   const handlePredict = useCallback(async () => {
@@ -127,7 +152,25 @@ export default function App() {
           </div>
         </div>
 
-        <nav style={{ display: 'flex', gap: 4 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          {/* API status indicator */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+            <div style={{
+              width: 8, height: 8, borderRadius: '50%', flexShrink: 0,
+              background: apiStatus === 'online' ? '#22c55e'
+                : apiStatus === 'waking'  ? '#f59e0b'
+                : apiStatus === 'checking'? '#94a3b8'
+                : '#ef4444',
+              boxShadow: apiStatus === 'online' ? '0 0 6px #22c55e88' : 'none',
+            }} />
+            <span style={{ color: C.muted }}>
+              {apiStatus === 'online'   ? 'API online'
+               : apiStatus === 'waking'  ? 'API waking up…'
+               : apiStatus === 'checking'? 'Checking API…'
+               : 'API offline'}
+            </span>
+          </div>
+          <nav style={{ display: 'flex', gap: 4 }}>
           {TABS.map(t => (
             <button key={t} onClick={() => setTab(t)} style={{
               padding: '6px 16px', borderRadius: 8, border: 'none', cursor: 'pointer',
