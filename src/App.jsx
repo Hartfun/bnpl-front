@@ -278,15 +278,31 @@ function Overview({ data, err }) {
 ═══════════════════════════════════════════════════════════════════════════ */
 function Predict({ fields, funds, text, setText, field, setField, fund, setFund, onSubmit, loading, result, err }) {
 
-  const TOPICS = [
-    { label: 'Affordable & helpful', icon: '✅', text: 'BNPL makes expensive products affordable and helps me manage my monthly budget easily.' },
-    { label: 'Fear of debt', icon: '⚠️', text: 'I am scared of accumulating debt and hidden charges using BNPL or EMI services.' },
-    { label: 'Convenient for shopping', icon: '🛒', text: 'These services are very convenient for online shopping and I use them regularly.' },
-    { label: 'Overspending risk', icon: '💸', text: 'Using BNPL makes it too easy to overspend and lose track of how much I owe.' },
-    { label: 'No interest, good deal', icon: '🎯', text: 'Zero interest EMI is a great deal — I used it to buy my phone without financial stress.' },
-    { label: 'Trust issues', icon: '🔒', text: 'I don\'t trust BNPL apps with my financial data and worry about security and fraud.' },
-    { label: 'Peer pressure', icon: '👥', text: 'My friends all use BNPL so I feel pressured to use it even though I am not comfortable.' },
-    { label: 'Late fees concern', icon: '📅', text: 'Missing a payment means huge late fees which is very stressful for students like me.' },
+  const CLUSTERS = [
+    {
+      id: 1, label: 'Cluster 1', name: 'Risk-Aware Avoiders',
+      color: '#C9A84C', desc: 'Low adoption · Negative sentiment',
+      personas: [
+        { label: 'Debt anxiety', icon: '😰', text: 'I am very worried about debt and hidden charges. BNPL services feel risky and I prefer to avoid them entirely.' },
+        { label: 'No trust', icon: '🚫', text: 'I do not trust buy now pay later apps. The fine print is confusing and missing payments ruins your credit score.' },
+      ],
+    },
+    {
+      id: 2, label: 'Cluster 2', name: 'Active Adopters',
+      color: '#F0D080', desc: 'High adoption · Positive sentiment',
+      personas: [
+        { label: 'Regular user', icon: '✅', text: 'I use BNPL regularly for gadgets and online shopping. It is very convenient and helps me spread payments easily.' },
+        { label: 'Smart finance', icon: '💡', text: 'Zero interest EMI is a great financial tool. I used it to buy my laptop and it did not affect my monthly budget at all.' },
+      ],
+    },
+    {
+      id: 3, label: 'Cluster 3', name: 'Curious Explorers',
+      color: '#e2e8f0', desc: 'Mixed adoption · Neutral sentiment',
+      personas: [
+        { label: 'Considering it', icon: '🤔', text: 'I have never used BNPL but I am curious. It seems useful for big purchases though I worry about overspending.' },
+        { label: 'Peer influence', icon: '👥', text: 'My friends use BNPL services and say it is helpful. I might try it for my next purchase if the terms are clear.' },
+      ],
+    },
   ];
 
   const FIELD_ICONS = {
