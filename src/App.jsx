@@ -341,8 +341,8 @@ function Predict({ fields, funds, text, setText, field, setField, fund, setFund,
       id: 1, label: 'Cluster 1', name: 'Cautious Non-Users',
       color: '#e2e8f0', desc: '2.7% adoption · Neutral sentiment',
       personas: [
-        { label: 'Considering it', icon: '🤔', text: 'I have never used BNPL but I am curious. It seems useful for big purchases though I would need to understand the terms first.' },
-        { label: 'No need yet', icon: '💭', text: 'I have not used BNPL as I prefer to pay upfront when possible. I am open to trying it for a large planned purchase.' },
+        { label: 'Non-user', icon: '💭', text: 'I have not used BNPL services. I am aware they exist and allow instalment payments but have not had a reason to try them.' },
+        { label: 'Pay upfront', icon: '💰', text: 'I am not a user of BNPL services. I manage my expenses through my monthly allowance and pay for items at the time of purchase.' },
       ],
     },
     {
