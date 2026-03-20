@@ -4,6 +4,7 @@ import {
   PieChart, Pie, Cell, RadialBarChart, RadialBar, Legend, LabelList
 } from 'recharts';
 
+// v2.1 - cluster personas, gold theme, full width
 const API = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 /* ── colour tokens ─────────────────────────────────────────────────────────── */
@@ -19,7 +20,7 @@ const C = {
 const Card = ({ children, style = {} }) => (
   <div style={{
     background: C.surface, border: `1px solid ${C.border}`,
-    borderRadius: 12, padding: 24, ...style
+    borderRadius: 16, padding: 28, ...style
   }}>{children}</div>
 );
 
@@ -196,7 +197,7 @@ function Overview({ data, err }) {
       </div>
 
       {/* Charts row 1 */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 20 }}>
         <Card>
           <SectionTitle>Sentiment Distribution (VADER)</SectionTitle>
           <ResponsiveContainer width="100%" height={220}>
@@ -323,7 +324,7 @@ function Predict({ fields, funds, text, setText, field, setField, fund, setFund,
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, maxWidth: 900, margin: '0 auto' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
 
       {/* Cluster persona selector */}
       <Card>
@@ -595,7 +596,7 @@ function Clusters({ data }) {
       </div>
 
       {/* Charts */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 20 }}>
         <Card>
           <SectionTitle>BNPL Adoption Rate by Cluster</SectionTitle>
           <ResponsiveContainer width="100%" height={220}>
