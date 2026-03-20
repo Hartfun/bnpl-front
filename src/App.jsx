@@ -330,24 +330,24 @@ function Predict({ fields, funds, text, setText, field, setField, fund, setFund,
   // Cluster 2 => adoption=53.7% sentiment=-0.456 => Reluctant Users
   const CLUSTERS = [
     {
-      id: 0, label: 'Cluster 0', name: 'Happy Adopters',
-      color: '#C9A84C', desc: '43.7% adoption · Positive sentiment',
+      id: 0, name: 'Happy Adopters',
+      color: '#e2e8f0', desc: '43.7% adoption · Positive sentiment',
       personas: [
         { label: 'Regular user', icon: '✅', text: 'I use BNPL regularly for gadgets and online shopping. It is very convenient and helps me spread payments easily.' },
         { label: 'Smart finance', icon: '💡', text: 'Zero interest EMI is a great financial tool. I used it to buy my laptop and it did not affect my monthly budget at all.' },
       ],
     },
     {
-      id: 1, label: 'Cluster 1', name: 'Cautious Non-Users',
+      id: 1, name: 'Cautious Non-Users',
       color: '#e2e8f0', desc: '2.7% adoption · Neutral sentiment',
       personas: [
-        { label: 'Non-user', icon: '💭', text: 'I do not use BNPL. I pay for things when I buy them.' },
+        { label: 'Non-user', icon: '💭', text: 'I am a student. I buy things using cash or bank transfer' },
         { label: 'Pay upfront', icon: '💰', text: 'I have not tried EMI or BNPL. I use my monthly funds for purchases.' },
       ],
     },
     {
-      id: 2, label: 'Cluster 2', name: 'Reluctant Users',
-      color: '#ef4444', desc: '53.7% adoption · Negative sentiment',
+      id: 2, name: 'Reluctant Users',
+      color: '#e2e8f0', desc: '53.7% adoption · Negative sentiment',
       personas: [
         { label: 'Bad experience', icon: '😤', text: 'I have used BNPL but regret it. The hidden fees and missed payment penalties were far more than I expected.' },
         { label: 'Peer pressure', icon: '😟', text: 'I started using BNPL because everyone around me did but I am now struggling to keep up with the repayments each month.' },
@@ -620,14 +620,7 @@ function Clusters({ data }) {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      <Card>
-        <SectionTitle>K-Means Segmentation (k = 3)</SectionTitle>
-        <p style={{ color: C.muted, fontSize: 14 }}>
-          Students were clustered into 3 segments using K-Means on sentiment score, field of study, and funding source.
-          The optimal k was determined via the Elbow method.
-        </p>
-      </Card>
-
+      
       {/* Cluster cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 20 }}>
         {clusters.map((c, i) => (
