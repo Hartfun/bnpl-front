@@ -341,8 +341,8 @@ function Predict({ fields, funds, text, setText, field, setField, fund, setFund,
       id: 1, label: 'Cluster 1', name: 'Cautious Non-Users',
       color: '#e2e8f0', desc: '2.7% adoption · Neutral sentiment',
       personas: [
-        { label: 'Non-user', icon: '💭', text: 'I have not used BNPL services. I am aware they exist and allow instalment payments but have not had a reason to try them.' },
-        { label: 'Pay upfront', icon: '💰', text: 'I am not a user of BNPL services. I manage my expenses through my monthly allowance and pay for items at the time of purchase.' },
+        { label: 'Non-user', icon: '💭', text: 'I do not use BNPL. I pay for things when I buy them.' },
+        { label: 'Pay upfront', icon: '💰', text: 'I have not tried EMI or BNPL. I use my monthly funds for purchases.' },
       ],
     },
     {
