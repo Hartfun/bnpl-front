@@ -11,7 +11,7 @@ const API = 'https://bnpl-back.onrender.com';
 const C = {
   accent: '#C9A84C', accent2: '#F0D080',
   positive: '#C9A84C', neutral: '#e2e8f0', negative: '#ef4444',
-  cluster: ['#C9A84C', '#F0D080', '#e2e8f0'],
+  cluster: ['#C9A84C', '#e2e8f0', '#ef4444'],
   bg: '#0a0a0a', surface: '#111111', surface2: '#1a1a1a', border: '#2a2a2a',
   text: '#f8f8f8', muted: '#888888',
 };
@@ -324,29 +324,33 @@ function Overview({ data, err }) {
 ═══════════════════════════════════════════════════════════════════════════ */
 function Predict({ fields, funds, text, setText, field, setField, fund, setFund, onSubmit, loading, result, err }) {
 
+  // Cluster IDs match actual KMeans output:
+  // Cluster 0 => adoption=43.7% sentiment=+0.422 => Happy Adopters
+  // Cluster 1 => adoption=2.7%  sentiment= 0.000 => Cautious Non-Users
+  // Cluster 2 => adoption=53.7% sentiment=-0.456 => Reluctant Users
   const CLUSTERS = [
     {
-      id: 1, label: 'Cluster 1', name: 'Risk-Aware Avoiders',
-      color: '#C9A84C', desc: 'Low adoption · Negative sentiment',
-      personas: [
-        { label: 'Debt anxiety', icon: '😰', text: 'I am very worried about debt and hidden charges. BNPL services feel risky and I prefer to avoid them entirely.' },
-        { label: 'No trust', icon: '🚫', text: 'I do not trust buy now pay later apps. The fine print is confusing and missing payments ruins your credit score.' },
-      ],
-    },
-    {
-      id: 2, label: 'Cluster 2', name: 'Active Adopters',
-      color: '#F0D080', desc: 'High adoption · Positive sentiment',
+      id: 0, label: 'Cluster 0', name: 'Happy Adopters',
+      color: '#C9A84C', desc: '43.7% adoption · Positive sentiment',
       personas: [
         { label: 'Regular user', icon: '✅', text: 'I use BNPL regularly for gadgets and online shopping. It is very convenient and helps me spread payments easily.' },
         { label: 'Smart finance', icon: '💡', text: 'Zero interest EMI is a great financial tool. I used it to buy my laptop and it did not affect my monthly budget at all.' },
       ],
     },
     {
-      id: 3, label: 'Cluster 3', name: 'Curious Explorers',
-      color: '#e2e8f0', desc: 'Mixed adoption · Neutral sentiment',
+      id: 1, label: 'Cluster 1', name: 'Cautious Non-Users',
+      color: '#e2e8f0', desc: '2.7% adoption · Neutral sentiment',
       personas: [
-        { label: 'Considering it', icon: '🤔', text: 'I have never used BNPL but I am curious. It seems useful for big purchases though I worry about overspending.' },
-        { label: 'Peer influence', icon: '👥', text: 'My friends use BNPL services and say it is helpful. I might try it for my next purchase if the terms are clear.' },
+        { label: 'Considering it', icon: '🤔', text: 'I have never used BNPL but I am curious. It seems useful for big purchases though I would need to understand the terms first.' },
+        { label: 'No need yet', icon: '💭', text: 'I have not used BNPL as I prefer to pay upfront when possible. I am open to trying it for a large planned purchase.' },
+      ],
+    },
+    {
+      id: 2, label: 'Cluster 2', name: 'Reluctant Users',
+      color: '#ef4444', desc: '53.7% adoption · Negative sentiment',
+      personas: [
+        { label: 'Bad experience', icon: '😤', text: 'I have used BNPL but regret it. The hidden fees and missed payment penalties were far more than I expected.' },
+        { label: 'Peer pressure', icon: '😟', text: 'I started using BNPL because everyone around me did but I am now struggling to keep up with the repayments each month.' },
       ],
     },
   ];
@@ -371,21 +375,32 @@ function Predict({ fields, funds, text, setText, field, setField, fund, setFund,
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20, maxWidth: 860, margin: '0 auto', width: '100%' }}>
 
-      {/* Quick example pills */}
+      {/* Quick example pills — 2 per cluster, 3 clusters = 3 rows of 2 */}
       <Card>
         <SectionTitle>Quick examples</SectionTitle>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 10, marginBottom: 20 }}>
-          {CLUSTERS.flatMap(cl => cl.personas).map((p) => (
-            <button key={p.label} onClick={() => setText(p.text)} style={{
-              padding: '12px 14px', borderRadius: 10, textAlign: 'left', cursor: 'pointer',
-              border: text === p.text ? `2px solid ${C.accent}` : `1px solid ${C.border}`,
-              background: text === p.text ? C.accent + '18' : C.surface2,
-              transition: 'all .15s', display: 'flex', flexDirection: 'column', gap: 6,
-            }}>
-              <span style={{ fontSize: 18 }}>{p.icon}</span>
-              <span style={{ fontWeight: 600, fontSize: 12, color: text === p.text ? C.accent2 : C.text, lineHeight: 1.3 }}>{p.label}</span>
-              <span style={{ fontSize: 11, color: C.muted, lineHeight: 1.4 }}>{p.text.slice(0, 55)}…</span>
-            </button>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 20 }}>
+          {CLUSTERS.map((cl) => (
+            <div key={cl.id} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+              {cl.personas.map((p) => (
+                <button key={p.label} onClick={() => setText(p.text)} style={{
+                  padding: '12px 14px', borderRadius: 10, textAlign: 'left', cursor: 'pointer',
+                  border: text === p.text ? `2px solid ${cl.color}` : `1px solid ${C.border}`,
+                  background: text === p.text ? cl.color + '18' : C.surface2,
+                  transition: 'all .15s', display: 'flex', flexDirection: 'column', gap: 5,
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span style={{ fontSize: 16 }}>{p.icon}</span>
+                    <span style={{ fontWeight: 600, fontSize: 12, color: text === p.text ? cl.color : C.text }}>{p.label}</span>
+                    <span style={{
+                      marginLeft: 'auto', fontSize: 10, color: cl.color,
+                      background: cl.color + '18', padding: '1px 7px',
+                      borderRadius: 8, border: `1px solid ${cl.color}44`,
+                    }}>{cl.label}</span>
+                  </div>
+                  <span style={{ fontSize: 11, color: C.muted, lineHeight: 1.4 }}>{p.text.slice(0, 70)}…</span>
+                </button>
+              ))}
+            </div>
           ))}
         </div>
 
@@ -581,11 +596,12 @@ function Clusters({ data }) {
   if (!data) return <LoadingScreen />;
   const { clusters } = data;
 
-  const NAMES = ['💡 Curious Explorers', '⚠️ Risk-Aware Avoiders', '✅ Active Adopters'];
+  // Names indexed by KMeans cluster ID (0, 1, 2)
+  const NAMES = ['✅ Happy Adopters', '🤔 Cautious Non-Users', '⚠️ Reluctant Users'];
   const DESCS = [
-    'Moderate sentiment, mixed adoption. Students exploring digital credit options.',
-    'Lower sentiment scores, higher caution. Concerned about debt and hidden fees.',
-    'High sentiment, active BNPL users. Comfortable with digital credit products.',
+    'Adoption 43.7% · Positive sentiment. Active users who find BNPL convenient and stress-free.',
+    'Adoption 2.7% · Neutral sentiment. Students who have not used BNPL and have no strong opinion.',
+    'Adoption 53.7% · Negative sentiment. Users who tried BNPL but had poor experiences.',
   ];
 
   const adoptData = clusters.map((c, i) => ({
