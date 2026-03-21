@@ -3,6 +3,8 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, RadialBarChart, RadialBar, Legend, LabelList
 } from 'recharts';
+import logoUrl from './assets/logo_Wp.svg'
+
 
 // v2.1 - cluster personas, gold theme, full width
 const API = 'https://bnpl-back.onrender.com';
@@ -137,15 +139,19 @@ export default function App() {
       <header style={{
         background: '#111111', borderBottom: `1px solid #2a2a2a`,
         padding: '0 40px', display: 'flex', alignItems: 'center',
-        justifyContent: 'space-between', height: 64, position: 'sticky', top: 0, zIndex: 100
+        justifyContent: 'space-between', height: 90, position: 'sticky', top: 0, zIndex: 100
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, paddingTop: 1 }}>
           <div style={{
-            width: 36, height: 36, borderRadius: 10,
+            width: 86, height: 86, borderRadius: 10,
             background: `linear-gradient(135deg,#C9A84C,#F0D080)`,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             fontSize: 18
-          }}>💳</div>
+          }}><img
+                        src={logoUrl} alt="Logo"
+                        style={{ height: '66px', width: 'auto', filter: 'brightness(0) invert(1)', objectFit: 'contain' }}
+                      />
+                      </div>
           <div>
             <div style={{ fontWeight: 700, fontSize: 16 }}>BNPL Insight</div>
             <div style={{ fontSize: 11, color: C.muted }}>Student Survey · ML Dashboard</div>
